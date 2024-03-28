@@ -1,5 +1,5 @@
 const queriesAuthors = {
-    createAuthor:`
+createAuthor:`
     INSERT INTO authors (name,surname,email,image)
     VALUES ($1,$2,
     SELECT id_author FROM authors WHERE email=$3), $4`,

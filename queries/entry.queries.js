@@ -29,3 +29,11 @@ const queriesEntries = {
     }
 
     module.exports = queriesEntries;
+
+/* Evita inseción de registros duplicados
+ALTER TABLE `table` ADD UNIQUE (
+`CODIGO` ,
+`VALOR` ,
+`FECHA`
+);
+*/

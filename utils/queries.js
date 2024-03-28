@@ -1,19 +1,31 @@
-const queriesAll = {
-    getAllEntries:`
-        SELECT * FROM entries
-        `,
+const queriesEntries = {
     createEntry:`
         INSERT INTO entries(title,content,id_author,category)
         VALUES ($1,$2,
         (SELECT id_author FROM authors WHERE email=$3),$4)
         `,
+    getAllEntries:`
+        SELECT * FROM entries
+        `,
     getEntriesByEmail:`
         SELECT e.title,e.content,e.id_author,e.category 
-        FROM ENTRIES AS e 
+        FROM ENTRIES AS e
         INNER JOIN authors AS a
         ON e.id_author=a.id_author
         WHERE a.e-mail = $1
         `,
+    getEntriesByIdAuthor:`
+        SELECT title, content, id_author, category 
+        FROM ENTRIES 
+        WHERE id_author = $1
+         `
+        ,
+    updateEntry:`
+        UPDATE entries 
+        SET title = $2, content = $3, date = S4, id_author = $5, category = S6
+        WHERE id_entry = $1
+        `
+        ,
     deleteEntry:`
         DELETE * 
         FROM Entries
@@ -29,17 +41,27 @@ const queriesAll = {
     createAuthor:`
         INSERT INTO authors (name,surname,email,image)
         VALUES ($1,$2,
-        SELECT id_author FROM authors WHERE email=$3), $4`,
+        SELECT id_author FROM authors WHERE email=$3), $4`
+        ,
     deleteAuthor:`
         DELETE * 
         FROM authors
         WHERE email = "S1"
-    `, 
+        `, 
     deleteAuthorsTable:`
-        DROP TABLE authors`,
+        DROP TABLE authors` 
     }
 
-    module.exports = queriesAll;
-    
-    //NOTA: Añadir también las queries para CREAR y BORRAR las tablas Author y Entry. 
-    //Después, desde el fichero models/entry.js o models/author.js llamar a la query que necesitas importando el módulo.
+module.exports = queriesEntries;
+
+/* Evita inseción de registros duplicados
+ALTER TABLE `table` ADD UNIQUE (
+`CODIGO` ,
+`VALOR` ,
+`FECHA`
+);
+*/
+
+
+
+
