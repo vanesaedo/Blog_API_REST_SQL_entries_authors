@@ -36,7 +36,7 @@ const getEntriesByEmail = async (email) => {
 
 
 
-const entries {
+const entries = {
     getAllEntries,
     getEntriesByEmail
 } 

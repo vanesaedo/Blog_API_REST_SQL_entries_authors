@@ -6,6 +6,8 @@ const routes = express.Router();
 
 const authorsController = require("../controllers/authors.controller");
 
+routes.get('/', authorsController.getAuthor);
+
 // POST: localhost:3000/api/entries/new
 // Add new author
 routes.post('/', authorsController.createAuthor);
