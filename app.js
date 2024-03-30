@@ -4,14 +4,22 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+//console.log(`NODE_ENV=${config.NODE_ENV}`);
 
-console.log(`NODE_ENV=${config.NODE_ENV}`);
 
+const entriesRoutes = require("./routes/entries.routes")
+const authorsRoutes = require("./routes/authors.routes")
+
+app.use(express.json());//parsea el body de las peticiones
+
+// http//locallhost:3000/
 app.get('/', (req, res) => {
   res.send('Hello world');
 });
-app.use('/', entries.entriesRoutes);
-app.use('/', authors.authorsRoutes);
+
+//API
+app.use('/api/authors',authorsRoutes);
+app.use('/api/entries',entriesRoutes);
 
 
 app.listen(config.PORT, config.HOST, function () {
@@ -22,8 +30,6 @@ app.listen(config.PORT, config.HOST, function () {
 
 
 
-const entriesRoutes = require("./routes/entries.routes")
-const authorsRoutes = require("./routes/authors.routes")
 
 //Middlewares
 app.use(express.json()); // Para parsear el body de las peticiones
@@ -33,13 +39,11 @@ app.use(express.json()); // Para parsear el body de las peticiones
     res.status(200).send("Home. Welcome to backend!");
   });
   
-  //API
-  app.use('/api/authors',authorsRoutes);
-  app.use('/api/entries',entriesRoutes);
 
-  // http://localhost:3000
-  app.listen(port, () => {
-    console.log(`Example app listening on  http://localhost:${port}`);
-  });
+
+// http://localhost:3000
+app.listen(port, () => {
+  console.log(`Example app listening on  http://localhost:${port}`);
+});
 
 
