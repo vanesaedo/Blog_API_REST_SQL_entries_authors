@@ -2,10 +2,11 @@
 const config = require('./config.js');
 const express = require('express');
 const bodyParser = require('body-parser');//from morgan tutorial
+const logger = require('./logger');//Instructions from Bunyan requirements. This code require Bunyan modules
 const app = express();
 const port = 3000;
 
-//Morgan settings: to manage gets
+//Morgan settings: to manage petitions
 
 const addRequestId = require('express-request-id')();
 const morgan = require('morgan');
@@ -41,19 +42,59 @@ app.use(morgan(loggerFormat, {
     stream: process.stdout
 }));
 
-app.post("/stuff", function (req, res) {
+//Bunyan
+/* 
+From Bunyan config: We then add logger for requests and use the concept of a child logger to log the request id and body */
 
-    var response = {
-        fullname: `${req.body.firstname} ${req.body.lastname}`
-    }
-    res.status(200).send(response);
+app.use(function (req, res, next){
+  var log = logger.loggerInstance.child({
+      id: req.id,
+      body: req.body
+  }, true)
+  log.info({req: req})
+  next();
 });
+
+/* We also add a logger for responses. We need the log to happen after a response has been sent, like an ‘after’ hook */
+
+app.use(function (req, res, next) {
+  function afterResponse() {
+      res.removeListener('finish', afterResponse);
+      res.removeListener('close', afterResponse);
+      var log = logger.loggerInstance.child({
+          id: req.id
+      }, true)
+      log.info({res:res}, 'response')
+  }
+  res.on('finish', afterResponse);
+  res.on('close', afterResponse);
+  next();
+});
+
+/* We also log the endpoint . Replaced stuff with authors*/
+
+app.post("/authors", function (req, res) {
+  var response = {
+      fullname: `${req.body.firstname} ${req.body.lastname}`
+  }
+  logger.logResponse(req.id, response, 200);
+  res.status(200).send(response);
+});
+
+//Morgan: 
 
 app.set('port', process.env.PORT || 8081);
 const server = app.listen(app.get('port'), () => {
     console.log(`Express running → PORT ${server.address().port}`);
 });
+
+// Buyan
+// Defining streams in logger.js ( is basically a definition of where the log output should go). We define two streams here stdout and an external file. In the logger.js file we update the loggerInstance variable */
+
 //----------------end of morgan code
+
+
+
 //console.log(`NODE_ENV=${config.NODE_ENV}`);
 
 
