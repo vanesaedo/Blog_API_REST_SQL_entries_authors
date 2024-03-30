@@ -30,9 +30,6 @@ app.use(bodyParser.urlencoded({
 
 
 
-
-var loggerFormat = ':id [:date[web]] ":method :url" :status :response-time';
-
 app.use(morgan(loggerFormat, {
     skip: function (req, res) {
         return res.statusCode < 400
@@ -80,7 +77,7 @@ app.use(function (req, res, next) {
 
 app.post("/entries", function (req, res) {
   var response = {
-      fullname: `${req.body.firstname} ${req.body.lastname}`
+      entry: `${req.body.title}`
   }
   logger.logResponse(req.id, response, 200);
   res.status(200).send(response);
@@ -88,10 +85,7 @@ app.post("/entries", function (req, res) {
 
 //Morgan: 
 
-app.set('port', process.env.PORT || 8081);
-const server = app.listen(app.get('port'), () => {
-    console.log(`Express running → PORT ${server.address().port}`);
-});
+
 
 // Buyan
 // Defining streams in logger.js ( is basically a definition of where the log output should go). We define two streams here stdout and an external file. In the logger.js file we update the loggerInstance variable */
@@ -122,12 +116,13 @@ app.get("/entries", function (req, res) {//entries replace tutorial example tabl
 });
 
 
-
-
-app.listen(config.PORT, config.HOST, function () {
+/* app.listen(config.PORT, config.HOST, function () {
   console.log(`App listening on http://${config.HOST}:${config.PORT}`);
+}); */
+
+app.set('port', process.env.PORT || 8081);
+const server = app.listen(app.get('port'), () => {
+    console.log(`Express running → PORT ${server.address().port}`);
 });
-
-
 
 
