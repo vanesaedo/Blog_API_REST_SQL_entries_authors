@@ -1,5 +1,5 @@
 
-const config = require('./config.js');
+const config = require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');//from morgan tutorial
 const logger = require('./logger');//Instructions from Bunyan requirements. This code require Bunyan modules
@@ -7,24 +7,29 @@ const app = express();
 const port = 3000;
 
 //Morgan settings: to manage petitions
-
+//For morgan use. I wrote this after "npm install express-request-id". The request id is added to the req object and can be retrieved by calling req.id
 const addRequestId = require('express-request-id')();
 const morgan = require('morgan');
+
+
+morgan.token('id', function getId(req) {
+    return req.id
+});
+
+var loggerFormat = ':id [:date[web]]" :method :url" :status :responsetime';
+
+
+app.use(addRequestId);
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.get("/entries", function (req, res) {//entries replace tutorial example table
-  res.status(200).send();
-});
 
-app.use(addRequestId);
 
-morgan.token('id', function getId(req) {
-    return req.id
-});
 
 var loggerFormat = ':id [:date[web]] ":method :url" :status :response-time';
 
@@ -71,9 +76,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-/* We also log the endpoint . Replaced stuff with authors*/
+/* We also log the endpoint . Replaced stuff with entries*/
 
-app.post("/authors", function (req, res) {
+app.post("/entries", function (req, res) {
   var response = {
       fullname: `${req.body.firstname} ${req.body.lastname}`
   }
@@ -112,23 +117,17 @@ app.get('/', (req, res) => {
 app.use('/api/authors',authorsRoutes);
 app.use('/api/entries',entriesRoutes);
 
-
-//For morgan use. I wrote this after "npm install express-request-id". The request id is added to the req object and can be retrieved by calling req.id
-const addRequestId = require('express-request-id')();
-app.use(addRequestId);
-
-const morgan = require('morgan');
-morgan.token('id', function getId(req) {
-    return req.id
+app.get("/entries", function (req, res) {//entries replace tutorial example table
+  res.status(200).send();
 });
 
-var loggerFormat = ':id [:date[web]]" :method :url" :status :responsetime';
 
 
 
 app.listen(config.PORT, config.HOST, function () {
   console.log(`App listening on http://${config.HOST}:${config.PORT}`);
 });
+
 
 
 

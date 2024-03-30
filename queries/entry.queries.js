@@ -3,17 +3,10 @@ const queriesEntries = {
         SELECT * FROM entries
         `,
     createEntry:`
-        INSERT INTO entries(title,content,id_author,category)
+        ALTER TABLE entries ADD UNIQUE (title,content,id_author,category)
         VALUES ($1,$2,
         (SELECT id_author FROM authors WHERE email=$3),$4)
         `,
-        /* Evita inseción de registros duplicados
-ALTER TABLE `table` ADD UNIQUE (
-`CODIGO` ,
-`VALOR` ,
-`FECHA`
-);
-*/
     getEntriesByEmail:`
         SELECT e.title,e.content,e.id_author,e.category 
         FROM entries AS e 
@@ -35,5 +28,9 @@ ALTER TABLE `table` ADD UNIQUE (
         `
     }
 
-    module.exports = queriesEntries;
+   /*  module.exports = queriesEntries;
 
+    INSERT INTO entries(title,content,id_author,category)
+    VALUES ($1,$2,
+    (SELECT id_author FROM authors WHERE email=$3),$4)
+     */
