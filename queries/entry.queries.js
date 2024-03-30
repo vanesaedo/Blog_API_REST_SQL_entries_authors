@@ -7,9 +7,16 @@ const queriesEntries = {
         VALUES ($1,$2,
         (SELECT id_author FROM authors WHERE email=$3),$4)
         `,
+        /* Evita inseción de registros duplicados
+ALTER TABLE `table` ADD UNIQUE (
+`CODIGO` ,
+`VALOR` ,
+`FECHA`
+);
+*/
     getEntriesByEmail:`
         SELECT e.title,e.content,e.id_author,e.category 
-        FROM ENTRIES AS e 
+        FROM entries AS e 
         INNER JOIN authors AS a
         ON e.id_author=a.id_author
         WHERE a.e-mail = $1
@@ -30,10 +37,3 @@ const queriesEntries = {
 
     module.exports = queriesEntries;
 
-/* Evita inseción de registros duplicados
-ALTER TABLE `table` ADD UNIQUE (
-`CODIGO` ,
-`VALOR` ,
-`FECHA`
-);
-*/
