@@ -6,10 +6,11 @@
     password: "123456",
 }); */
 
-//con variables de entorno
+//enviroment variables for db connection
 const pool = new Pool({ 
     user: process.env.USER, 
     host: process.env.HOST, 
     database: process.env.DATABASE, 
     password: process.env.PASSWORD 
 });
+
