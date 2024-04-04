@@ -1,23 +1,7 @@
-// AUTHORS ROUTES
-
 const express = require('express');
-const routes = express.Router();
+const router = express.Router();
+const controllers = require('../controllers/entries.controller')
 
+router.get('/authors/all', controllers.hello);
 
-const authorsController = require("../controllers/authors.controller");
-
-routes.get('/', authorsController.getAuthor);
-
-// POST: localhost:3000/api/entries/new
-// Add new author
-routes.post('/', authorsController.createAuthor);
-
-// DELETE: http://localhost:3000/api/entries?id_author=1
-// Delete author by id
-routes.post('/', authorsController.deleteAuthor);
-
-// DELETE: http://localhost:3000/api/authors
-// delete authors table
-routes.delete('/', authorsController.deleteAuthorsTable)
-
-module.exports = routes;
+module.exports = router;
