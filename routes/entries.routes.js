@@ -1,15 +1,37 @@
 const express = require('express');
-
-
-// 2. Rutas de entries
-// Llamand a entriesControlers
+// Rutas de productos
 const entriesController = require("../controllers/entries.controller");
-// LLamando al objeto Router de express para que haga lo propio con sus métodos cuando los llamemos abajo
 const router = express.Router();
 
-
-router.get('/api/entries', entriesController.entryNoId);
-
-
+router.get('/', entriesController.getEntries);
+router.post('/', entriesController.createEntry);
+router.put('/', entriesController.updateEntry);
+router.delete('/:title', entriesController.deleteEntry);
 
 module.exports = router;
+
+// GET http://localhost:3000/api/entries --> ALL
+// GET http://localhost:3000/api/entries?email=hola@gmail.com --> por email
+// POST http://localhost:3000/api/entries
+/*
+{
+    "title":"noticia desde Node",
+    "content":"va a triunfar esto2",
+    "email":"alejandru@thebridgeschool.es",
+    "category":"sucesos"
+}
+    */
+
+// PUT http://localhost:3000/api/entries
+/*
+{
+    title: "Nos vamos de cañas!!!!",
+    content: "Corren rumores de que papa noel tenía un saco vacio y lo llenó",
+    date: "2024-03-22",
+    category: "fiestas",
+    email: "alejandru@thebridgeschool.es",
+    old_title: "Nos vamos de tortillas"
+}
+*/
+
+// DELETE http://locallhost:3000/api/entries/:title
