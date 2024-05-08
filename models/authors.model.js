@@ -10,11 +10,11 @@ const pool = new Pool({
 });
 
 // GET
-const getAuthorsByEmail = async (email) => {
+const getAuthorByEmail = async (email) => {
   let client, result;
   try {
     client = await pool.connect(); // Espera a abrir conexion
-    const data = await client.query(queries.getAuthorsByEmail, [email]);
+    const data = await client.query(queries.getAuthorByEmail, [email]);
     result = data.rows;
   } catch (err) {
     console.log(err);
@@ -43,7 +43,7 @@ const getAllAuthors = async () => {
 
 // CREATE
 const createAuthor = async (author) => {
-  const { name, surname, email, image } = author;
+  const { name, surname, email, image, bio } = author;
   let client, result;
   try {
     client = await pool.connect(); // Espera a abrir conexion
@@ -52,6 +52,7 @@ const createAuthor = async (author) => {
       surname,
       email,
       image,
+      bio
     ]);
     result = data.rowCount;
   } catch (err) {
@@ -74,16 +75,17 @@ const createAuthor = async (author) => {
 }
 */
 
-const updateAuthor = async (author) => {
-  const { name, surname, email, image, old_email} = author;
+const updateAuthorByEmail = async (author, old_email) => {
+  const { name, surname, email, image, bio} = author;
   let client, result;
   try {
     client = await pool.connect(); // Espera a abrir conexion
-    const data = await client.query(queries.updateAuthor, [
+    const data = await client.query(queries.updateAuthorByEmail, [
       name,
       surname,
       email,
       image,
+      bio,
       old_email
     ]);
     result = data.rowCount;
@@ -116,10 +118,10 @@ const deleteAuthor = async (id_author) => {
 
 
 const authors = {
-  getAuthorsByEmail,
+  getAuthorByEmail,
   getAllAuthors,
   createAuthor,
-  updateAuthor,
+  updateAuthorByEmail,
   deleteAuthor
 };
 

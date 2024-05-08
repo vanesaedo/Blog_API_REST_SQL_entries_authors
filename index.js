@@ -3,8 +3,8 @@ const app = express();
 const port = 3000;
 
 // Rutas
-const booksRoutes = require("./routes/books.routes")
-const productsRoutes = require("./routes/products.routes")
+//const booksRoutes = require("./routes/books.routes")
+//const productsRoutes = require("./routes/products.routes")
 const entriesRoutes = require("./routes/entries.routes")
 const authorsRoutes = require("./routes/authors.routes")
 
@@ -19,8 +19,8 @@ app.get("/", (req, res) => {
 });
 
 //API
-app.use('/api/books',booksRoutes);
-app.use('/api/products',productsRoutes);
+//app.use('/api/books',booksRoutes);
+//app.use('/api/products',productsRoutes);
 app.use('/api/entries',entriesRoutes);
 app.use('/api/authors',authorsRoutes);
 

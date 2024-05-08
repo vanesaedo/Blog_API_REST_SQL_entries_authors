@@ -4,7 +4,8 @@ CREATE TABLE authors (
   name varchar(45) NOT NULL, 
   surname varchar(45) NOT NULL, 
   email varchar(100) NOT NULL UNIQUE,
-  image varchar(255)
+  image varchar(255),
+	bio varchar(255)
 );
 
 -- Crear tabla entries
@@ -15,11 +16,12 @@ CREATE TABLE entries (
   date date DEFAULT CURRENT_DATE,
   id_author int,
   category varchar(15),
-  FOREIGN KEY (id_author) REFERENCES authors(id_author)
+  FOREIGN KEY (id_author) REFERENCES authors(id_author),
+  image varchar(255)
 );
 
 -- Insertar datos en tabla authors
-INSERT INTO authors(name,surname,email,image)
+INSERT INTO authors(name,surname,email,image,bio)
 VALUES
 ('Alejandru','Regex','alejandru@thebridgeschool.es','https://randomuser.me/api/portraits/thumb/men/75.jpg'),
 ('Birja','Rivera','birja@thebridgeschool.es','https://randomuser.me/api/portraits/thumb/men/60.jpg'),

@@ -25,33 +25,34 @@ const queries = {
         id_author=(SELECT id_author FROM authors WHERE email = $5)
     WHERE 
         title = $6`,
-  deleteEntry: `DELETE FROM entries
+  deleteEntryByTitle: `DELETE FROM entries
   WHERE title = $1;`,
 
   // AUTHORS
 
-  getAuthorsByEmail: `
+  getAuthorByEmail: `
     SELECT a.id_author,a.name,a.surname, a.email,a.image
     FROM authors AS a
     WHERE a.email=$1
     ORDER BY a.id_author;`,
 
   getAllAuthors: `
-    SELECT a.id_author,a.name,a.surname, a.email,a.image
+    SELECT a.id_author,a.name,a.surname, a.email,a.image, a.bio
     FROM authors AS a
     ORDER BY a.id_author;
     `,
   createAuthor: `
-    INSERT INTO authors(name,surname,email,image) 
-    VALUES ($1,$2,$3,$4)`,
+    INSERT INTO authors(name,surname,email,image,bio) 
+    VALUES ($1,$2,$3,$4,$5)`,
 
-  updateAuthor: `
+  updateAuthorByEmail: `
     UPDATE author
     SET
         name=$1, 
         surname=$2, 
         email=$3, 
-        image=$4
+        image=$4,
+        bio=$5
     WHERE 
         email = $6`,
   deleteAuthor: `DELETE FROM authors

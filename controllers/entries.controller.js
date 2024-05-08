@@ -50,27 +50,36 @@ const createEntry = async (req, res) => {
 */
 
 const updateEntry = async (req, res) => {
+    const editEntryTitle = req.params.title;
     const modifiedEntry = req.body; // {title,content,date,category,email,old_title}
-    const response = await entry.updateEntry(modifiedEntry);
+    const response = await entry.updateEntry(modifiedEntry, editEntryTitle);
     res.status(200).json({
         "items_updated": response,
         data: modifiedEntry
     });
 }
 
-const deleteEntry = async (req, res) => {
-        
+const deleteEntryByTitle = async (req, res) => {
+try{     
     if (req.params.title) {
-        entryToDelete = await entry.deleteEntry(req.params.title);
+        entryToDelete = await entry.deleteEntryByTitle(req.params.title);
+        console.log(entryToDelete);
+        res.status(200).json({message: `Se ha borrado la entry `}); // [] con las entries encontradas
     }
+  
     else {
-        entries = await entryToDelete.getAllEntries();
+        res.status(400).json({message:"title don't recieved"})
     }
-    res.status(200).json({message: `Se ha borrado la entry '${title}' `}); // [] con las entries encontradas
+}
+catch (error) {
+    console.log(error.message)
+    res.status(500).json({error:error.message});
+
+}
 }
 module.exports = {
     getEntries,
     createEntry,
     updateEntry,
-    deleteEntry
+    deleteEntryByTitle
 }

@@ -4,9 +4,12 @@ const entriesController = require("../controllers/entries.controller");
 const router = express.Router();
 
 router.get('/', entriesController.getEntries);
-router.post('/', entriesController.createEntry);
-router.put('/', entriesController.updateEntry);
-router.delete('/:title', entriesController.deleteEntry);
+router.post('/new/?', entriesController.createEntry);
+router.put('/edit/:title', entriesController.updateEntry);
+router.delete('/delete/:title', entriesController.deleteEntryByTitle);
+//router.get('/find/:title', entriesController.findEntryTitle);
+//router.get('/find/:author', entriesController.findEntryAuthor);
+//router.get('/find/:category', entriesController.findEntryCategory);
 
 module.exports = router;
 

@@ -15,6 +15,7 @@ const getEntriesByEmail = async (email) => {
   try {
     client = await pool.connect(); // Espera a abrir conexion
     const data = await client.query(queries.getEntriesByEmail, [email]);
+    console.log(data);
     result = data.rows;
   } catch (err) {
     console.log(err);
@@ -31,6 +32,7 @@ const getAllEntries = async () => {
   try {
     client = await pool.connect(); // Espera a abrir conexion
     const data = await client.query(queries.getAllEntries);
+    console.log(data);
     result = data.rows;
   } catch (err) {
     console.log(err);
@@ -43,7 +45,7 @@ const getAllEntries = async () => {
 
 // CREATE
 const createEntry = async (entry) => {
-  const { title, content, email, category } = entry;
+  const { title, content, email, category, image } = entry;
   let client, result;
   try {
     client = await pool.connect(); // Espera a abrir conexion
@@ -52,6 +54,7 @@ const createEntry = async (entry) => {
       content,
       email,
       category,
+      image
     ]);
     result = data.rowCount;
   } catch (err) {
@@ -63,33 +66,8 @@ const createEntry = async (entry) => {
   return result;
 };
 
-//UPDATE
-
-/*
-    SET
-        title=$1, 
-        content=$2, 
-        date=$3, 
-        category=$4,
-        id_author=(SELECT id_author FROM authors WHERE email = $5)
-    WHERE 
-        title = $6`,
-*/
-/*
-
-{
-    title: "Se acabaron las mandarinas de TB",
-    content: "Corren rumores de que papa noel tenía un saco vacio y lo llenó",
-    date: "2021-12-25",
-    category: "sucesos",
-    email: "alejandru@thebridgeschool.es",
-    old_title: "Se acabaron las mandarinas de TB"
-}
-
-*/
-
-const updateEntry = async (entry) => {
-  const { title, content, date, category, email, old_title} = entry;
+const updateEntry = async (entry, old_title) => {
+  const { title, content, date, category, email} = entry;
   let client, result;
   try {
     client = await pool.connect(); // Espera a abrir conexion
@@ -113,12 +91,12 @@ const updateEntry = async (entry) => {
 
 // DELETE
 
-const deleteEntry = async (entry) => {
+const deleteEntryByTitle = async (title) => {
   //const { title, content, date, category, email, old_title} = entry;
   let client, result;
   try {
     client = await pool.connect(); // Espera a abrir conexion
-    const data = await client.params(queries.deleteEntry, [title]);
+    const data = await client.query(queries.deleteEntryByTitle, [title]);
     result = data.rowCount;
   } catch (err) {
     console.log(err);
@@ -135,7 +113,7 @@ const entries = {
   getAllEntries,
   createEntry,
   updateEntry,
-  deleteEntry
+  deleteEntryByTitle
 };
 
 module.exports = entries;
